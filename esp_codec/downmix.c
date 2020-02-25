@@ -187,6 +187,8 @@ static esp_err_t downmix_close(audio_element_handle_t self)
 #endif
     return ESP_OK;
 }
+/* add by ylm for sventu*/
+extern int g_music_box_filter[7];
 
 static int downmix_process(audio_element_handle_t self, char *in_buffer, int in_len)
 {
@@ -251,6 +253,13 @@ static int downmix_process(audio_element_handle_t self, char *in_buffer, int in_
         } else if (bytes[index] != r_size * downmix->downmix_info.source_info[index].channel) {
             memset(downmix->inbuf[index] + bytes[index], 0, downmix->max_sample * 2 * sizeof(short) - bytes[index]);
         }
+/* add by ylm for sventu*/
+		#if 1
+		if (g_music_box_filter[index]==0)
+		{
+            memset(downmix->inbuf[index], 0, downmix->max_sample * 2 * sizeof(short));			
+		}
+		#endif
         ESP_LOGD(TAG, "bytes[ %d ] = %d", index, bytes[index]);
     }
 #endif
